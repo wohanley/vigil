@@ -12,6 +12,7 @@
                  [yesql "0.4.2"]
                  [environ "1.0.0"]
                  [enlive "1.1.5"]]
+  :resource-path ["sql/query"]
   :plugins [[lein-environ "1.0.0"]
             [environ/environ.lein "0.2.1"]]
   :hooks [environ.leiningen.hooks]
