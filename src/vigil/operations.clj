@@ -27,7 +27,7 @@
   )
 
 (defn check [player-id]
-  (map (comp :id data/kill)
+  (map (comp :id data/kill-player)
        (core/check (data/get-player player-id)
                    (data/get-full-game-by-player-id player-id))))
 

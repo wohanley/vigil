@@ -1,1 +1,6 @@
-SELECT * FROM player WHERE id = :id
+SELECT id,
+       team_id,
+       "name",
+       alive
+FROM player
+WHERE id = :id;

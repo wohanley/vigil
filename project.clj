@@ -18,4 +18,7 @@
   :hooks [environ.leiningen.hooks]
   :ring {:handler vigil.web.start/app}
   :min-lein-version "2.0.0"
-  :uberjar-name "vigil.jar")
+  :uberjar-name "vigil.jar"
+  :profiles {:dev-common {:dependencies [[midje "1.6.3"]]}
+             :dev-override {}
+             :dev [:dev-common :dev-override]})

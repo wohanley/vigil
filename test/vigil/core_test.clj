@@ -20,7 +20,7 @@
       (core/kill :alive-2) => :dead-2)))
 
 (facts "about new-game"
-  (fact "calls ->game with defaults"
-    (core/new-game) => :empty-game
-    (provided
-      (core/->game nil nil) => :empty-game)))
+  (fact "creates game with defaults"
+    (core/new-game ..duration..) => {:id nil
+                                     :started nil
+                                     :sally-duration ..duration..}))
