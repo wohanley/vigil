@@ -9,7 +9,7 @@
                  [ring/ring-jetty-adapter "1.3.2"]
                  [ring/ring-json "0.3.1"]
                  [postgresql "9.3-1102.jdbc41"]
-                 [korma "0.4.0"]
+                 [yesql "0.4.0"]
                  [environ "1.0.0"]
                  [enlive "1.1.5"]]
   :plugins [[lein-environ "1.0.0"]
