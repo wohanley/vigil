@@ -2,8 +2,7 @@
   (:require [vigil.data.util :as dutil]
             [environ.core :refer [env]]
             [vigil.heroku :as heroku]
-            [korma.core :refer :all]
-            [korma.db :refer :all]))
+            [yesql.core :refer [defquery]]))
 
 ; Initialize the database. There is a special case for tests because I don't
 ; know how to do that kind of config thing right yet and I'm bored with trying
@@ -11,7 +10,7 @@
 ;(if (not (= (env :database-url) "test"))
 ;  (defdb korma-db (postgres (heroku/convert-database-url (env :database-url)))))
 
-(defdb korma-db (postgres (heroku/convert-database-url "postgres://vigil_app:password@localhost:5432/vigil")))
+(def db-spec (postgres (heroku/convert-database-url "postgres://vigil_app:password@localhost:5432/vigil")))
 
 (defn sql-now [] (java.sql.Timestamp. (.getTime (java.util.Date.))))
 
