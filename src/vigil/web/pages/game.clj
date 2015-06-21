@@ -7,7 +7,7 @@
 
 (def page
   (enlive/template
-   "templates/game.html"
+   "game.html"
    [{:keys [game current-player]}]
    [:#current-player] (if (not (empty? current-player)) (enlive/substitute (current-player/snip current-player)))
    [:#sally-duration] (enlive/content (str (:sally-duration game)))

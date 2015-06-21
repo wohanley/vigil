@@ -3,7 +3,7 @@
 
 (def snip
   (enlive/snippet
-   "templates/current-player.html"
+   "current-player.html"
    [:#current-player]
    [{:keys [name team alive]}]
    [:.name] (enlive/content name)

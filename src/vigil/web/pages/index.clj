@@ -3,4 +3,4 @@
 
 (def page
   (enlive/template
-   "templates/index.html" []))
+   "index.html" []))

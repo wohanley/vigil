@@ -4,7 +4,7 @@
 
 (def snip
   (enlive/snippet
-   "templates/join-team.html"
+   "join-team.html"
    [:.join]
    [team-id]
    [:input.team-id] (enlive/set-attr :value team-id)))

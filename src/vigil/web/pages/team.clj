@@ -5,7 +5,7 @@
 
 (def snip
   (enlive/snippet
-   "templates/team.html"
+   "team.html"
    [:.team]
    [{:keys [id name players joinable]}]
    [:.team-name] (enlive/content name)
