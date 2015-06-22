@@ -21,6 +21,5 @@
 
 (facts "about new-game"
   (fact "creates game with defaults"
-    (core/new-game ..duration..) => {:id nil
-                                     :started nil
+    (core/new-game ..duration..) => {:started nil
                                      :sally-duration ..duration..}))
