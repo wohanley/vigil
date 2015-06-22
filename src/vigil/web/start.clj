@@ -38,6 +38,7 @@
   (route/not-found "Oops"))
 
 (defn -main [& [port]]
+  "This is some Heroku magic I don't really understand."
   (let [port (Integer. (or port (env :port) 5000))]
     (jetty/run-jetty (site #'app-routes) {:port port :join? false})))
 
