@@ -11,6 +11,7 @@
             [vigil.web.pages.index :as index]
             [vigil.web.pages.game :as game]))
 
+
 (defn parse-id [id]
   "Turn an ID from a parameter string into a map with an :id key to an integer,
   suitable for passing on to business logic."
