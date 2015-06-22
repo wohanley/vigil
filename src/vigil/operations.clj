@@ -6,7 +6,7 @@
   (data/get-full-game game-id))
 
 (defn- kill-attackers [player-id]
-  (map (comp :id data/kill-player!)
+  (map data/kill-player!
        (core/check (data/get-player player-id)
                    (data/get-full-game-by-player-id player-id))))
 
@@ -15,7 +15,7 @@
    2. Gather all the data a player needs for a view of their game, including the
   deaths of attackers in 1."
   (do
-    (kill-attackers player-id)
+    (kill-attackers {:id player-id})
     {:game (data/get-full-game-by-player-id player-id)
      :current-player (data/get-player player-id)}))
 

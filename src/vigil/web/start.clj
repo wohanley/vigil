@@ -11,6 +11,12 @@
             [vigil.web.pages.index :as index]
             [vigil.web.pages.game :as game]))
 
+(defn parse-id [id]
+  "Turn an ID from a parameter string into a map with an :id key to an integer,
+  suitable for passing on to business logic."
+  {:id (Integer/parseInt id)})
+
+
 (defn new-game [player-name team-name sally-duration]
   (ring-response/redirect
    (format "/my-game/%s"
@@ -20,12 +26,12 @@
 
 (defn get-game [id]
   "You don't have to be in a game to view its state."
-  (game/page {:game (ops/get-full-game (Integer/parseInt id))}))
+  (game/page {:game (ops/get-full-game (parse-id id))}))
 
 (defn get-player-game [player-id]
   "Show a player the state of their game, crucially including a check for
   attackers. This handler is where the game is played."
-  (game/page (ops/check (Integer/parseInt player-id))))
+  (game/page (ops/check (parse-id player-id))))
 
 
 (defroutes app-routes
