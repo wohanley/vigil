@@ -25,7 +25,7 @@
 (defn get-player-game [player-id]
   "Show a player the state of their game, crucially including a check for
   attackers. This handler is where the game is played."
-  (game/page (ops/load-player-game (Integer/parseInt player-id))))
+  (game/page (ops/check (Integer/parseInt player-id))))
 
 
 (defroutes app-routes
