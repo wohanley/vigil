@@ -9,7 +9,9 @@
                  [ring/ring-jetty-adapter "1.3.2"]
                  [ring/ring-json "0.3.1"]
                  [postgresql "9.3-1102.jdbc41"]
-                 [yesql "0.4.2"]
+                 ;; support for named parameter maps in yesql doesn't land
+                 ;; until 0.5
+                 [yesql "0.5.0-rc3"]
                  [environ "1.0.0"]
                  [enlive "1.1.5"]]
   :resource-paths ["sql/query" "resources/templates"]

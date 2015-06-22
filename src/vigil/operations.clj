@@ -6,7 +6,7 @@
   (data/get-full-game game-id))
 
 (defn- kill-attackers [player-id]
-  (map (comp :id data/kill-player)
+  (map (comp :id data/kill-player!)
        (core/check (data/get-player player-id)
                    (data/get-full-game-by-player-id player-id))))
 
@@ -24,13 +24,13 @@
    (core/set-up-game player-name team-name sally-duration))
 
 (defn create-team [game-id name]
-  (data/insert-team {:game-id game-id :name name}))
+  (data/insert-team<! {:game-id game-id :name name}))
 
 (defn remove-team [team-id]
   )
 
 (defn create-player [team-id name]
-  (data/insert-player (core/new-player team-id name)))
+  (data/insert-player<! (core/new-player team-id name)))
 
 (defn remove-player [player-id]
   )
