@@ -12,3 +12,9 @@
 
 (defn attacking-players [player game]
   (filter (fn [opponent] (= (attacking opponent) (:team player))) (opposing-players player game)))
+
+(defn map-or-apply [f x]
+  "If x is sequential, map f over it. If not, simply pass x to f."
+  (if (sequential? x)
+    (map f x)
+    (f x)))

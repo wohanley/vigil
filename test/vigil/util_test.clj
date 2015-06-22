@@ -73,3 +73,10 @@
       (util/attacking :team-3-attacker) => :home-team
       (util/attacking :team-3-attacker-2) => :home-team
       (util/attacking :civilian) => nil)))
+
+
+(facts "about map-or-apply"
+  (fact "applies function to non-seq argument"
+    (util/map-or-apply #(.toUpperCase %) "hi") => "HI")
+  (fact "maps function over seq"
+    (util/map-or-apply #(.toUpperCase %) ["hi" "there"]) => ["HI" "THERE"]))

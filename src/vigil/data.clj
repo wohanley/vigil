@@ -1,5 +1,6 @@
 (ns vigil.data
-  (:require [vigil.data.util :as dutil]
+  (:require [vigil.util :as util]
+            [vigil.data.util :as dutil]
             [environ.core :refer [env]]
             [vigil.heroku :as heroku]
             [yesql.core :refer [defquery]]))
@@ -20,7 +21,8 @@
   "Convert SQL-style names to Clojure-style on the way out of the database.
   parameters is a map containing named query parameters, e.g.
   {:name wohanley :alive true}"
-  (fn [parameters] (map db-transform (query-fn (db-prepare parameters)))))
+  (fn [parameters]
+    (util/map-or-apply db-transform (query-fn (db-prepare parameters)))))
 
 (defn single [query-fn]
   (fn [id] (first ((db-wrap query-fn) id))))
