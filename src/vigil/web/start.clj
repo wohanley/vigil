@@ -11,16 +11,22 @@
             [vigil.web.pages.index :as index]
             [vigil.web.pages.game :as game]))
 
-(defn get-player-game [player-id]
-  (game/page (ops/load-player-game (Integer/parseInt player-id))))
-
 (defn new-game [player-name team-name sally-duration]
   (ring-response/redirect
    (format "/my-game/%s"
-           (:id (ops/new-game player-name team-name (Integer/parseInt sally-duration))))))
+           (:id (ops/new-game player-name
+                              team-name
+                              (Integer/parseInt sally-duration))))))
 
 (defn get-game [id]
+  "You don't have to be in a game to view its state."
   (game/page {:game (ops/get-full-game (Integer/parseInt id))}))
+
+(defn get-player-game [player-id]
+  "Show a player the state of their game, crucially including a check for
+  attackers. This handler is where the game is played."
+  (game/page (ops/load-player-game (Integer/parseInt player-id))))
+
 
 (defroutes app-routes
   (GET "/" [] (index/page))
