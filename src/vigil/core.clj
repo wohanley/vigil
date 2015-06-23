@@ -34,8 +34,3 @@
 
 (defn kill [player]
   (assoc player :alive false))
-
-(defn check [player game]
-  "Look to see if anyone is attacking player's team, and kill them if they are.
-  Returns a vector of killed players."
-  (map kill (attacking-players player game)))
