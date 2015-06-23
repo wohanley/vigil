@@ -1,23 +1,23 @@
 (ns vigil.operations
   (:require [vigil.core :as core]
-            [vigil.data :as data]))
+            [vigil.data :as data]
+            [vigil.operations.check :as check]))
 
-(defn get-full-game [game-id]
-  (data/get-full-game game-id))
+(defn get-full-game [game]
+  (data/get-full-game game))
 
-(defn- kill-attackers [player-id]
-  (map data/kill-player!
-       (core/check (data/get-player player-id)
-                   (data/get-full-game-by-player-id player-id))))
-
-(defn check [player-id]
-  "1. Check for attackers and kill them if we catch any.
-   2. Gather all the data a player needs for a view of their game, including the
-  deaths of attackers in 1."
-  (do
-    (kill-attackers {:id player-id})
-    {:game (data/get-full-game-by-player-id player-id)
-     :current-player (data/get-player player-id)}))
+(defn check [player]
+  "1. Kill player if there are any sallies due to kill them.
+   2. If player is alive, check for attackers and kill them if we catch any.
+   3. If player is alive, kill anyone they have overdue sallies against.
+   4. Gather all the data a player needs for a view of their game."
+  (let [game (data/get-full-game-by-player-id player)]
+    (do
+      ()
+      (map data/kill-player! (check/kill-attackers player))
+      ;; We need to grab the game again after possibly changing it above.
+      {:game (data/get-full-game-by-player-id player)
+       :current-player (data/get-player player)})))
 
 (defn new-game [player-name team-name sally-duration]
   "Set up a game for the player."

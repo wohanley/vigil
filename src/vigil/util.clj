@@ -11,7 +11,9 @@
   (:against (first (filter #(:active %) (:sallies player)))))
 
 (defn attacking-players [player game]
-  (filter (fn [opponent] (= (attacking opponent) (:team player))) (opposing-players player game)))
+  "Find players in game that are attacking player."
+  (filter (fn [opponent] (= (attacking opponent) (:team player)))
+          (opposing-players player game)))
 
 (defn map-or-apply [f x]
   "If x is sequential, map f over it. If not, simply pass x to f."
