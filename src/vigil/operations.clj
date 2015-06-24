@@ -4,6 +4,7 @@
             [vigil.util :as util]
             [vigil.operations.check :as check]))
 
+
 (defn get-full-game [game]
   (data/get-full-game game))
 
@@ -12,13 +13,14 @@
    2. If player is alive, check for attackers and kill them if we catch any.
    3. If player is alive, kill anyone they have overdue sallies against.
    4. Gather all the data a player needs for a view of their game."
-  (let [game (data/get-full-game-by-player-id player)
-        killer (check/due-to-kill player game)]
+  (let [game (data/get-game-by-player-id {:player-id (:id player)})
+        sallies (data/get-sallies-by-game-id game)
+        killers (check/due-to-kill sallies (:sally-duration game))]
     (do
-      (if (not (nil? killer))
-        (data/kill-player! {:id (:id player) :killer-id (:id killer)})
+      (if (not (empty? killers))
+        (data/kill-player! {:id (:id player) :killer-id (:id killers)})
         (do
-          (map data/kill-player! (util/attackers player game))
+          (map data/kill-player! (filter player game))
           (map data/kill-player! (check/kill-attacked player game))))
       ;; We need to grab the game again after possibly changing it above.
       {:game (data/get-full-game-by-player-id player)

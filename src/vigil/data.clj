@@ -61,6 +61,10 @@
            :teams (map add-players-to-team (get-teams-by-game-id game))
            :sallies (get-sallies-by-game-id game))))
 
+(defn get-game-by-player-id [params]
+  "params should contain :player-id"
+  (get-game params))
+
 (defn get-full-game-by-player-id [player-id]
   (get-full-game (:game-id (get-team (:team-id (get-player player-id))))))
 
