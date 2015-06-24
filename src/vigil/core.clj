@@ -5,6 +5,8 @@
             [dire.core :as dire]))
 
 
+;; I don't like this at all. I need to take a solid look at error handling in
+;; Clojure, because I haven't seen anything that waters my flowers yet.
 (defrecord error [message])
 
 (defrecord sally [player-id started])
