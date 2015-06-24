@@ -8,26 +8,26 @@
 (defn get-full-game [game]
   (data/get-full-game game))
 
-(defn check [player]
-  "1. Kill player if there are any sallies due to kill them.
-   2. If player is alive, check for attackers and kill them if we catch any.
-   3. If player is alive, kill anyone they have overdue sallies against.
-   4. Gather all the data a player needs for a view of their game."
-  (let [game (data/get-game-by-player-id {:player-id (:id player)})
+(defn check [stale-player]
+  "1. Mark any non-overdue sallies against stale-player intercepted.
+   2. Gather all the data a player needs for a view of their game."
+  (let [player (data/get-player stale-player)
+        game (data/get-game-by-player-id {:player-id (:id player)})
         sallies (data/get-sallies-by-game-id game)]
     (do
-      (if (not (empty? killers))
-        (data/kill-player! {:id (:id player) :killer-id (:id killers)})
-        (do
-          (map data/kill-player! (filter player game))
-          (map data/kill-player! (check/kill-attacked player game))))
+      (map (comp #(assoc % :intercepter-id (:id player)) data/intercept!)
+           (filter
+            (comp
+             (partial (comp not check/overdue) (:sally-duration game))
+             (partial check/against-team (:team-id player)))
+            sallies))
       ;; We need to grab the game again after possibly changing it above.
       {:game (data/get-full-game-by-player-id player)
        :current-player (data/get-player player)})))
 
 (defn new-game [player-name team-name sally-duration]
   "Set up a game for the player."
-   (core/set-up-game player-name team-name sally-duration))
+  (core/set-up-game player-name team-name sally-duration))
 
 (defn create-team [game-id name]
   (data/insert-team<! {:game-id game-id :name name}))

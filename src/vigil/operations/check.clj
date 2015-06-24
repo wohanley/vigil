@@ -5,7 +5,7 @@
             [clj-time.coerce :as tcoerce]))
 
 
-(defn due-to-kill [sally-duration sally]
+(defn overdue [sally-duration sally]
   "Predicate checking that sally is due to kill its target."
   (if (nil? (:started sally))
     false
@@ -23,11 +23,3 @@
 (defn by-player [player sally]
   "Predicate for sallies launched by player."
   (= (:id player) (:attacking-player-id sally)))
-
-(defn kill-attackers [player game]
-  "Look to see if anyone is attacking player's team, and kill them if they are.
-  Returns a vector of killed players."
-  )
-
-(defn kill-attacked [player game]
-  "Kill anyone player has overdue sallies against.")

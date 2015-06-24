@@ -77,5 +77,5 @@
 (defquery insert-player-raw<! "insert_player.sql" {:connection db-spec})
 (def insert-player<! (db-wrap insert-player-raw<!))
 
-(defquery kill-player-raw! "kill_player.sql" {:connection db-spec})
-(def kill-player! (db-wrap kill-player-raw!))
+(defquery intercept-sally-raw! "intercept_sally.sql" {:connection db-spec})
+(def intercept-sally! (db-wrap intercept-sally-raw!))
