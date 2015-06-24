@@ -1,7 +1,11 @@
 (ns vigil.core
   (:require [vigil.util :refer :all]
             [vigil.data :as data]
-            [vigil.sally :as sally]))
+            [vigil.sally :as sally]
+            [dire.core :as dire]))
+
+
+(defrecord error [message])
 
 (defrecord sally [player-id started])
 
@@ -41,3 +45,27 @@
             (filter (and (partial sally/against-team? (:team-id player))
                          (partial sally/overdue? (:sally-duration game)))
                     (:sallies game)))))
+
+(defn sally-forth [game target-team attacking-player]
+  "Launch an attack against an opposing team."
+  (data/sally-forth! {:attacking-player-id (:id attacking-player)
+                      :target-team-id (:id target-team)}))
+
+(dire/with-precondition! #'sally-forth
+  :live-attacker
+  (fn [_ _ attacking-player]
+    (not (nil? (killed-by attacking-player)))))
+
+(dire/with-handler! #'sally-forth
+  {:precondition :live-attacker}
+  (fn [e & args] (->error "attacking-player must be alive.")))
+
+(dire/with-precondition! #'sally-forth
+  :in-game
+  (fn [game team player]
+    (and (some (comp :id (partial = (:id team))) (:teams game))
+         (some (comp :id (partial = (:id player))) (flatten (:teams game))))))
+
+(dire/with-handler! #'sally-forth
+  {:precondition :in-game}
+  (fn [e & args] (->error "attacking-player and target-team must both be in game.")))

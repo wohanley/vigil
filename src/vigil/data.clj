@@ -95,5 +95,8 @@
 (defquery insert-player-raw<! "insert_player.sql" {:connection db-spec})
 (def insert-player<! (db-wrap insert-player-raw<!))
 
+(defquery sally-forth-raw! "sally_forth.sql" {:connection db-spec})
+(def sally-forth! (db-wrap sally-forth-raw!))
+
 (defquery intercept-sally-raw! "intercept_sally.sql" {:connection db-spec})
 (def intercept-sally! (db-wrap intercept-sally-raw!))

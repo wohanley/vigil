@@ -31,14 +31,5 @@
 (defn create-team [game-id name]
   (data/insert-team<! {:game-id game-id :name name}))
 
-(defn remove-team [team-id]
-  )
-
 (defn create-player [team-id name]
   (data/insert-player<! (core/new-player team-id name)))
-
-(defn remove-player [player-id]
-  )
-
-(defn attack [attacking-player-id target-team-id]
-  )
