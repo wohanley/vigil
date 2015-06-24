@@ -21,7 +21,6 @@
              (partial (comp not check/overdue?) (:sally-duration game))
              (partial check/against-team? (:team-id player)))
             sallies))
-      ;; We need to grab the game again after possibly changing it above.
       {:game (data/get-full-game-by-player-id player)
        :current-player (data/get-player player)})))
 
