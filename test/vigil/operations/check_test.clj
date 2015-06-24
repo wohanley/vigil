@@ -9,13 +9,12 @@
 
   (fact "returns false if sally is not overdue"
     (check/overdue? 0 nil) => false
-    (check/overdue? 10 {:started (tcoerce/to-sql-time
-                                     (time/minus
-                                      (time/now)
-                                      (time/seconds 5)))}) => false)
+    (check/overdue? 10 {:started (time/minus
+                                  (time/now)
+                                  (time/seconds 5))}) => false)
   
   (fact "returns true if sally is overdue"
-    (let [overdue-sally {:started (tcoerce/to-sql-time (time/minus
-                                                        (time/now)
-                                                        (time/seconds 15)))}]
+    (let [overdue-sally {:started (time/minus
+                                   (time/now)
+                                   (time/seconds 15))}]
       (check/overdue? 10 overdue-sally) => true)))

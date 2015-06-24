@@ -9,11 +9,7 @@
   "Predicate checking that sally is due to kill its target."
   (if (nil? (:started sally))
     false
-    (> (time/in-seconds
-        (time/interval
-         ;; TODO: I should handle this coercion at the data layer.
-         (tcoerce/from-sql-time (:started sally))
-         (time/now)))
+    (> (time/in-seconds (time/interval (:started sally) (time/now)))
        sally-duration)))
 
 (defn against-team? [team sally]
