@@ -68,4 +68,5 @@
 
 (dire/with-handler! #'sally-forth
   {:precondition :in-game}
-  (fn [e & args] (->error "attacking-player and target-team must both be in game.")))
+  (fn [e & args]
+    (->error "attacking-player and target-team must both be in game.")))
