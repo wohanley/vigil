@@ -5,16 +5,24 @@
             [clj-time.coerce :as tcoerce]))
 
 
-(defn due-to-kill [sally-duration sallies]
-  "Return a vector of all sallies that are due to kill their target."
-  (filter
-   #(> (time/in-seconds
+(defn due-to-kill [sally-duration sally]
+  "Predicate checking that sally is due to kill its target."
+  (if (nil? (:started sally))
+    false
+    (> (time/in-seconds
         (time/interval
          ;; TODO: I should handle this coercion at the data layer.
-         (tcoerce/from-sql-time (:started %))
+         (tcoerce/from-sql-time (:started sally))
          (time/now)))
-       sally-duration)
-   sallies))
+       sally-duration)))
+
+(defn against-team [team sally]
+  "Predicate for sallies against team."
+  (= (:id team) (:target-team-id sally)))
+
+(defn by-player [player sally]
+  "Predicate for sallies launched by player."
+  (= (:id player) (:attacking-player-id sally)))
 
 (defn kill-attackers [player game]
   "Look to see if anyone is attacking player's team, and kill them if they are.

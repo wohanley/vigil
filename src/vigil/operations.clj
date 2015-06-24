@@ -14,8 +14,7 @@
    3. If player is alive, kill anyone they have overdue sallies against.
    4. Gather all the data a player needs for a view of their game."
   (let [game (data/get-game-by-player-id {:player-id (:id player)})
-        sallies (data/get-sallies-by-game-id game)
-        killers (check/due-to-kill sallies (:sally-duration game))]
+        sallies (data/get-sallies-by-game-id game)]
     (do
       (if (not (empty? killers))
         (data/kill-player! {:id (:id player) :killer-id (:id killers)})
