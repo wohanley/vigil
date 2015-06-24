@@ -5,11 +5,11 @@
             [midje.sweet :refer :all]))
 
 
-(facts "about due-to-kill"
+(facts "about overdue?"
 
   (fact "returns false if sally is not overdue"
-    (check/due-to-kill 0 nil) => false
-    (check/due-to-kill 10 {:started (tcoerce/to-sql-time
+    (check/overdue? 0 nil) => false
+    (check/overdue? 10 {:started (tcoerce/to-sql-time
                                      (time/minus
                                       (time/now)
                                       (time/seconds 5)))}) => false)
@@ -18,4 +18,4 @@
     (let [overdue-sally {:started (tcoerce/to-sql-time (time/minus
                                                         (time/now)
                                                         (time/seconds 15)))}]
-      (check/due-to-kill 10 overdue-sally) => true)))
+      (check/overdue? 10 overdue-sally) => true)))

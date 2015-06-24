@@ -15,11 +15,11 @@
         game (data/get-game-by-player-id {:player-id (:id player)})
         sallies (data/get-sallies-by-game-id game)]
     (do
-      (map (comp #(assoc % :intercepter-id (:id player)) data/intercept!)
+      (map (comp #(assoc % :intercepter-id (:id player)) data/intercept-sally!)
            (filter
             (comp
-             (partial (comp not check/overdue) (:sally-duration game))
-             (partial check/against-team (:team-id player)))
+             (partial (comp not check/overdue?) (:sally-duration game))
+             (partial check/against-team? (:team-id player)))
             sallies))
       ;; We need to grab the game again after possibly changing it above.
       {:game (data/get-full-game-by-player-id player)
