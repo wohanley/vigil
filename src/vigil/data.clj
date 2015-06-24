@@ -44,6 +44,10 @@
   {:connection db-spec})
 (def get-teams-by-game-id (db-wrap get-teams-by-game-id-raw))
 
+(defquery get-sallies-by-game-id-raw "get_sallies_by_game_id.sql"
+  {:connection db-spec})
+(def get-sallies-by-game-id (db-wrap get-sallies-by-game-id-raw))
+
 (defn add-players-to-team [team]
   (assoc team :players (get-players-by-team-id team)))
 
@@ -54,8 +58,8 @@
   "params must be a map containing the key :id, specifying the game to be got."
   (let [game (get-game params)]
     (assoc game
-      :teams
-      (map add-players-to-team (get-teams-by-game-id game)))))
+           :teams (map add-players-to-team (get-teams-by-game-id game))
+           :sallies (get-sallies-by-game-id game))))
 
 (defn get-full-game-by-player-id [player-id]
   (get-full-game (:game-id (get-team (:team-id (get-player player-id))))))

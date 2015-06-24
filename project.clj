@@ -13,7 +13,8 @@
                  ;; until 0.5
                  [yesql "0.5.0-rc3"]
                  [environ "1.0.0"]
-                 [enlive "1.1.5"]]
+                 [enlive "1.1.5"]
+                 [clj-time "0.9.0"]]
   :resource-paths ["sql/query" "resources/templates"]
   :plugins [[lein-environ "1.0.0"]
             [environ/environ.lein "0.2.1"]]
