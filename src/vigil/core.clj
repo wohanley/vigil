@@ -1,6 +1,7 @@
 (ns vigil.core
   (:require [vigil.util :refer :all]
-            [vigil.data :as data]))
+            [vigil.data :as data]
+            [vigil.sally :as sally]))
 
 (defrecord sally [player-id started])
 
@@ -32,5 +33,11 @@
              player-name
              true)))
 
-(defn kill [player]
-  (assoc player :alive false))
+(defn killed-by [game player]
+  "Return the player that killed player in game, or nil if player is still
+  alive."
+  (first
+   (sort-by :started
+            (filter (and (partial sally/against-team? (:team-id player))
+                         (partial sally/overdue? (:sally-duration game)))
+                    (:sallies game)))))

@@ -1,9 +1,5 @@
-(ns vigil.operations.check
-  (:require [vigil.core :as core]
-            [vigil.util :as util]
-            [clj-time.core :as time]
-            [clj-time.coerce :as tcoerce]))
-
+(ns vigil.sally
+  (:require [clj-time.core :as time]))
 
 (defn overdue? [sally-duration sally]
   "Predicate checking that sally is due to kill its target."

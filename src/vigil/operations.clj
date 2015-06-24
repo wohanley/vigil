@@ -2,7 +2,7 @@
   (:require [vigil.core :as core]
             [vigil.data :as data]
             [vigil.util :as util]
-            [vigil.operations.check :as check]))
+            [vigil.sally :as sally]))
 
 
 (defn get-full-game [game]
@@ -18,8 +18,8 @@
       (map (comp #(assoc % :intercepter-id (:id player)) data/intercept-sally!)
            (filter
             (comp
-             (partial (comp not check/overdue?) (:sally-duration game))
-             (partial check/against-team? (:team-id player)))
+             (partial (comp not sally/overdue?) (:sally-duration game))
+             (partial sally/against-team? (:team-id player)))
             sallies))
       {:game (data/get-full-game-by-player-id player)
        :current-player (data/get-player player)})))
