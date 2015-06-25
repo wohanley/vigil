@@ -41,16 +41,17 @@
   (fact "checks that attacking-player is alive"
     (core/sally-forth {:sally-duration 10
                        :teams [{:id 1
-                                :players [{:team-id 1}]}
+                                :players [{:id 1 :team-id 1}]}
                                {:id 2
-                                :players [{:team-id 2}]}]
-                       :sallies [{ ;; this sally has killed team 1
+                                :players [{:id 2 :team-id 2}]}]
+                       :sallies [{;; this sally has killed team 1
                                   :target-team-id 1
                                   :started (time/minus
                                             (time/now)
-                                            (time/seconds 5))}]}
+                                            (time/seconds 15))}]}
                       {:id 2}
-                      {:team-id 1}) => (partial instance? vigil.core.error))
+                      {:id 1 :team-id 1}) => (partial instance?
+                                                      vigil.core.error))
   
   (fact "checks that attacking-player is in game"
     (core/sally-forth {:sally-duration 10
@@ -60,12 +61,16 @@
                                 :players [{:team-id 2}]}]
                        :sallies []}
                       {:id 2}
-                      {:team-id 1}) => (partial instance? vigil.core.error))
+                      {:id 1 :team-id 1}) => (partial instance?
+                                                      vigil.core.error))
 
   (fact "checks that target-team is in game"
     (core/sally-forth {:sally-duration 10
-                       :teams [{:id 1
-                                :players [{:team-id 1}]}]
+                       :teams [;; no team with ID 2
+                               {:id 1
+                                :players [{:id 1
+                                           :team-id 1}]}]
                        :sallies []}
                       {:id 2}
-                      {:team-id 1}) => (partial instance? vigil.core.error)))
+                      {:id 1 :team-id 1}) => (partial instance?
+                                                      vigil.core.error)))

@@ -50,13 +50,13 @@
 
 (defn sally-forth [game target-team attacking-player]
   "Launch an attack against an opposing team."
-  (data/sally-forth! {:attacking-player-id (:id attacking-player)
-                      :target-team-id (:id target-team)}))
+  (data/sally-forth<! {:attacking-player-id (:id attacking-player)
+                       :target-team-id (:id target-team)}))
 
 (dire/with-precondition! #'sally-forth
   :live-attacker
-  (fn [_ _ attacking-player]
-    (not (nil? (killed-by attacking-player)))))
+  (fn [game _ attacking-player]
+    (nil? (killed-by game attacking-player))))
 
 (dire/with-handler! #'sally-forth
   {:precondition :live-attacker}
@@ -65,8 +65,9 @@
 (dire/with-precondition! #'sally-forth
   :in-game
   (fn [game team player]
-    (and (some (comp :id (partial = (:id team))) (:teams game))
-         (some (comp :id (partial = (:id player))) (flatten (:teams game))))))
+    (and (some #(= (:id %) (:id team)) (:teams game))
+         (some #(= (:id %) (:id player)) (flatten (map :players
+                                                       (:teams game)))))))
 
 (dire/with-handler! #'sally-forth
   {:precondition :in-game}
