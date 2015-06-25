@@ -47,6 +47,7 @@
                          (partial sally/overdue? (:sally-duration game)))
                     (:sallies game)))))
 
+
 (defn sally-forth [game target-team attacking-player]
   "Launch an attack against an opposing team."
   (data/sally-forth! {:attacking-player-id (:id attacking-player)
@@ -71,3 +72,19 @@
   {:precondition :in-game}
   (fn [e & args]
     (->error "attacking-player and target-team must both be in game.")))
+
+
+(defn game-view [game]
+  "Transform game to a structure easily parsed by templates. Right now this
+  means use the sally information in game to mark each player alive or dead."
+  (assoc game
+         :teams (map
+                 (fn [team]
+                   (assoc
+                    team
+                    :players (map
+                              (fn [player]
+                                (assoc player
+                                       :alive (nil?  (killed-by game player))))
+                              (:players team))))
+                 (:teams game))))
