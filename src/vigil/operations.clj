@@ -22,9 +22,11 @@
              (partial (comp not sally/overdue?) (:sally-duration game))
              (partial sally/against-team? (:team-id player)))
             sallies))
-      {;; We need to load game again, because we may have changed it above.
-       :game (core/game-view (data/get-full-game-by-player-id player))
-       :current-player (data/get-player player)})))
+      ;; We need to load game again, because we may have changed it above.
+      (let [game (data/get-full-game-by-player-id player)]
+        {:game (core/game-view game)
+         :current-player (core/player-view game
+                                           (data/get-player player))}))))
 
 (defn new-game [player-name team-name sally-duration]
   "Set up a game for the player."
