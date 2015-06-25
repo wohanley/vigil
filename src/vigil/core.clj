@@ -73,18 +73,14 @@
   (fn [e & args]
     (->error "attacking-player and target-team must both be in game.")))
 
+(defn player-view [game player]
+  "Use the sally information in game to mark player alive or dead."
+  (assoc player :alive (nil? (killed-by game player))))
 
 (defn game-view [game]
   "Transform game to a structure easily parsed by templates. Right now this
   means use the sally information in game to mark each player alive or dead."
   (assoc game
-         :teams (map
-                 (fn [team]
-                   (assoc
-                    team
-                    :players (map
-                              (fn [player]
-                                (assoc player
-                                       :alive (nil?  (killed-by game player))))
-                              (:players team))))
-                 (:teams game))))
+         :teams (map #(assoc % :players (map (partial player-view game)
+                                             (:players %)))
+                     (:teams game))))
