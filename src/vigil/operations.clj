@@ -17,6 +17,11 @@
                                              (:players %)))
                      (:teams game))))
 
+(defn get-game-view-for-player [player]
+  (let [game (data/get-full-game-by-player-id player)]
+    {:game (game-view game)
+     :current-player (player-view game (data/get-player player))}))
+
 
 (defn get-full-game [game]
   (game-view (data/get-full-game game)))
@@ -36,10 +41,7 @@
              (partial sally/against-team? (:team-id player)))
             sallies))
       ;; We need to load game again, because we may have changed it above.
-      (let [game (data/get-full-game-by-player-id player)]
-        {:game (game-view game)
-         :current-player (player-view game
-                                      (data/get-player player))}))))
+      (get-game-view-for-player player))))
 
 (defn new-game [player-name team-name sally-duration]
   "Set up a game for the player."
@@ -54,5 +56,10 @@
 (defn join-game [game name]
   "Add a player named name to game and return an up-to-date view of game."
   (let [player (core/add-player-to-game game name)]
-    {:game (game-view (data/get-full-game-by-player-id player))
-     :current-player (player-view game player)}))
+    (get-game-view-for-player player)))
+
+(defn sally-forth [target-team attacking-player]
+  (let [game (data/get-full-game-by-player-id attacking-player)]
+    (do
+      (core/sally-forth game target-team attacking-player)
+      (get-game-view-for-player attacking-player))))

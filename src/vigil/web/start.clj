@@ -37,6 +37,10 @@
 (defn join-game [game-id name]
   (game/page (ops/join-game (parse-id game-id) name)))
 
+(defn sally-forth [target-team-id attacking-player-id]
+  (game/page (ops/sally-forth (parse-id target-team-id)
+                              (parse-id attacking-player-id))))
+
 
 (defroutes app-routes
   (GET "/" [] (index/page))
@@ -47,6 +51,8 @@
         (new-game player-name team-name sally-duration))
   (POST "/join-game" [game-id name]
         (join-game game-id name))
+  (POST "/sally-forth" [target-team-id attacking-player-id]
+        (sally-forth target-team-id attacking-player-id))
   (route/not-found "Oops"))
 
 (defn -main [& [port]]
