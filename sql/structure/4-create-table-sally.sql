@@ -3,8 +3,10 @@ DROP TABLE IF EXISTS sally;
 CREATE TABLE sally
 (
   id serial NOT NULL,
-  player_id int NOT NULL references player(id),
+  attacking_player_id int NOT NULL references player(id),
+  target_team_id int NOT NULL references team(id),
   started timestamp without time zone NOT NULL,
+  intercepted_by_player_id int NULL references player(id),
   CONSTRAINT sally_pkey PRIMARY KEY (id)
 )
 WITH (

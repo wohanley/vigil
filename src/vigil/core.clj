@@ -11,7 +11,7 @@
 
 (defrecord sally [player-id started])
 
-(defrecord player [team-id name alive])
+(defrecord player [team-id name])
 
 (defn new-player [team-id name]
   (->player team-id name true))
@@ -36,8 +36,7 @@
                    (->team (:id (data/insert-game<!
                                  (new-game sally-duration)))
                            team-name)))
-             player-name
-             true)))
+             player-name)))
 
 (defn killed-by [game player]
   "Return the player that killed player in game, or nil if player is still

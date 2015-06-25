@@ -1,6 +1,5 @@
 SELECT id,
        team_id,
-       "name",
-       alive
+       "name"
 FROM player
-WHERE team_id = :team_id;
+WHERE team_id = :id;

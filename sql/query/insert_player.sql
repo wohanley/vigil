@@ -1,1 +1,1 @@
-INSERT INTO player (team_id, "name", alive) VALUES (:team_id, :name, true);
+INSERT INTO player (team_id, "name") VALUES (:team_id, :name);

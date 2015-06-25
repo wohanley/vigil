@@ -12,16 +12,18 @@
   "1. Mark any non-overdue sallies against stale-player intercepted.
    2. Gather all the data a player needs for a view of their game."
   (let [player (data/get-player stale-player)
-        game (data/get-game-by-player-id {:player-id (:id player)})
+        game (data/get-full-game-by-player-id player)
         sallies (data/get-sallies-by-game-id game)]
     (do
-      (map (comp #(assoc % :intercepter-id (:id player)) data/intercept-sally!)
+      (map (comp #(assoc % :intercepted-by-player-id (:id player))
+                 data/intercept-sally!)
            (filter
             (comp
              (partial (comp not sally/overdue?) (:sally-duration game))
              (partial sally/against-team? (:team-id player)))
             sallies))
-      {:game (data/get-full-game-by-player-id player)
+      {;; We need to load game again, because we may have changed it above.
+       :game (data/get-full-game-by-player-id player)
        :current-player (data/get-player player)})))
 
 (defn new-game [player-name team-name sally-duration]

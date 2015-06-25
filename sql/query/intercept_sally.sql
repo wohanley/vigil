@@ -1,1 +1,3 @@
-UPDATE sally SET intercepted_by = :intercepter_id WHERE id = :id;
+UPDATE sally
+SET intercepted_by_player_id = :intercepted_by_player_id
+WHERE id = :id;

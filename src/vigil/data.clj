@@ -37,8 +37,7 @@
 
 (defn db-wrap [query-fn]
   "Convert SQL-style names to Clojure-style on the way out of the database.
-  parameters is a map containing named query parameters, e.g.
-  {:name wohanley :alive true}"
+  parameters is a map containing named query parameters, e.g. {:name wohanley}"
   (fn [parameters]
     (util/map-or-apply db-transform (query-fn (db-prepare parameters)))))
 
@@ -80,12 +79,10 @@
            :teams (map add-players-to-team (get-teams-by-game-id game))
            :sallies (get-sallies-by-game-id game))))
 
-(defn get-game-by-player-id [params]
-  "params should contain :player-id"
-  (get-game params))
-
-(defn get-full-game-by-player-id [player-id]
-  (get-full-game (:game-id (get-team (:team-id (get-player player-id))))))
+(defn get-full-game-by-player-id [params]
+  "params should contain :id for a player."
+  (get-full-game
+   {:id (:game-id (get-team {:id (:team-id (get-player params))}))}))
 
 (defquery insert-game-raw<! "insert_game.sql" {:connection db-spec})
 (def insert-game<! (db-wrap insert-game-raw<!))
