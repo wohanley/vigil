@@ -5,8 +5,21 @@
             [vigil.sally :as sally]))
 
 
+(defn player-view [game player]
+  "Use the sally information in game to mark player alive or dead."
+  (assoc player :alive (nil? (core/killed-by game player))))
+
+(defn game-view [game]
+  "Transform game to a structure easily parsed by templates. Right now this
+  means use the sally information in game to mark each player alive or dead."
+  (assoc game
+         :teams (map #(assoc % :players (map (partial player-view game)
+                                             (:players %)))
+                     (:teams game))))
+
+
 (defn get-full-game [game]
-  (core/game-view (data/get-full-game game)))
+  (game-view (data/get-full-game game)))
 
 (defn check [stale-player]
   "1. Mark any non-overdue sallies against stale-player intercepted.
@@ -24,16 +37,22 @@
             sallies))
       ;; We need to load game again, because we may have changed it above.
       (let [game (data/get-full-game-by-player-id player)]
-        {:game (core/game-view game)
-         :current-player (core/player-view game
-                                           (data/get-player player))}))))
+        {:game (game-view game)
+         :current-player (player-view game
+                                      (data/get-player player))}))))
 
 (defn new-game [player-name team-name sally-duration]
   "Set up a game for the player."
-  (core/game-view (core/set-up-game player-name team-name sally-duration)))
+  (game-view (core/set-up-game player-name team-name sally-duration)))
 
 (defn create-team [game-id name]
   (data/insert-team<! {:game-id game-id :name name}))
 
 (defn create-player [team-id name]
   (data/insert-player<! (core/new-player team-id name)))
+
+(defn join-game [game name]
+  "Add a player named name to game and return an up-to-date view of game."
+  (let [player (core/add-player-to-game game name)]
+    {:game (game-view (data/get-full-game-by-player-id player))
+     :current-player (player-view game player)}))

@@ -34,6 +34,9 @@
   attackers. This handler is where the game is played."
   (game/page (ops/check (parse-id player-id))))
 
+(defn join-game [game-id name]
+  (game/page (ops/join-game (parse-id game-id) name)))
+
 
 (defroutes app-routes
   (GET "/" [] (index/page))
@@ -42,6 +45,8 @@
        (get-player-game player-id))
   (POST "/game/new" [player-name team-name sally-duration]
         (new-game player-name team-name sally-duration))
+  (POST "/join-game" [game-id name]
+        (join-game game-id name))
   (route/not-found "Oops"))
 
 (defn -main [& [port]]
