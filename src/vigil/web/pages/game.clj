@@ -3,6 +3,7 @@
             [vigil.web.pages.current-player :as current-player]
             [vigil.web.pages.player :as player]
             [vigil.web.pages.team :as team]
+            [vigil.web.pages.attack-team :as attack-team]
             [clojure.pprint :refer [pprint]]))
 
 (def page
@@ -15,8 +16,12 @@
    [:#sally-duration]
    (enlive/content (str (:sally-duration game)))
    [:#teams]
-   (enlive/content
-    (map #(team/snip (assoc % :joinable (empty? current-player)))
-         (:teams game)))
+   (enlive/content (map #(concat (team/snip %)
+                                 (if (not= (:id %) (:team-id current-player))
+                                   (attack-team/snip
+                                    {:team %
+                                     :current-player current-player})
+                                   []))
+                        (:teams game)))
    [:#join-game-id]
    (enlive/set-attr :value (:id game))))

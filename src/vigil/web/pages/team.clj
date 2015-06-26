@@ -6,6 +6,8 @@
   (enlive/snippet
    "team.html"
    [:.team]
-   [{:keys [id name players joinable]}]
+   [{:keys [id name players]}]
    [:.team-name] (enlive/content name)
-   [:.players] (enlive/content (map player/snip players))))
+   [:.players] (enlive/content (map player/snip players))
+   [:form.attack :input.target-team-id] (enlive/set-attr :value id)
+   [:form.attack :input.attacking-player-id] (enlive/set-attr :value id)))
