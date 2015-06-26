@@ -7,7 +7,7 @@
 
 (defn player-view [game player]
   "Use the sally information in game to mark player alive or dead."
-  (assoc player :alive (nil? (core/killed-by game player))))
+  (assoc player :alive (nil? (core/killed-by-sally game player))))
 
 (defn game-view [game]
   "Transform game to a structure easily parsed by templates. Right now this

@@ -38,14 +38,26 @@
                            team-name)))
              player-name)))
 
-(defn killed-by [game player]
-  "Return the player that killed player in game, or nil if player is still
+(defn killed-by-sally [game player]
+  "Return the sally that killed player in game, or nil if player is still
   alive."
   (first
+   ;; It's probably not /quite/ right to simply sort this by :started, as it
+   ;; might make more sense to rank a after b where a is a sally against player
+   ;; that succeeded and b is a sally by player that started after a but was
+   ;; intercepted before a succeeded. That makes sense, right? uh, TODO
    (sort-by :started
-            (filter #(and (sally/against-team? {:id (:team-id player)} %)
-                          (sally/overdue? (:sally-duration game) %))
-                    (:sallies game)))))
+            (concat
+             (filter #(or ;; there are two ways a player can die:
+                       (and
+                        ;; a sally by another player that got them
+                        (sally/against-team? {:id (:team-id player)} %)
+                        (sally/overdue? (:sally-duration game) %))
+                       (and
+                        ;; their own sally being intercepted
+                        (sally/by-player? player %)
+                        (not (nil? (:intercepted-by-player-id %)))))
+                     (:sallies game))))))
 
 
 (defn sally-forth [game target-team attacking-player]
@@ -56,7 +68,7 @@
 (dire/with-precondition! #'sally-forth
   :live-attacker
   (fn [game _ attacking-player]
-    (nil? (killed-by game attacking-player))))
+    (nil? (killed-by-sally game attacking-player))))
 
 (dire/with-handler! #'sally-forth
   {:precondition :live-attacker}
