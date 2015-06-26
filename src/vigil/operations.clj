@@ -53,13 +53,7 @@
 (defn create-player [team-id name]
   (data/insert-player<! (core/new-player team-id name)))
 
-(defn join-game [game name]
-  "Add a player named name to game and return an up-to-date view of game."
-  (let [player (core/add-player-to-game game name)]
-    (get-game-view-for-player player)))
-
 (defn sally-forth [target-team attacking-player]
-  (let [game (data/get-full-game-by-player-id attacking-player)]
-    (do
-      (core/sally-forth game target-team attacking-player)
-      (get-game-view-for-player attacking-player))))
+  (core/sally-forth (data/get-full-game-by-player-id attacking-player)
+                    target-team
+                    attacking-player))

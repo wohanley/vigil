@@ -13,13 +13,22 @@
 
   (fact "returns nil if player is still alive"
     (core/killed-by {:sallies []} ..player..) => nil
-    (core/killed-by {:sally-duration 10
-                     :sallies [{}
-                               {:target-team-id 1
+    (core/killed-by {:teams [{:id 1
+                              :players [{:id 1 :team-id 1}]}
+                             {:id 2
+                              :players [{:id 2 :team-id 2}]}]
+                     :sally-duration 10
+                     :sallies [{;; a successful sally against team 2
+                                :target-team-id 2
+                                :started (time/minus
+                                          (time/now)
+                                          (time/seconds 15))}
+                               {;; a non-overdue sally against team 1
+                                :target-team-id 1
                                 :started (time/minus
                                           (time/now)
                                           (time/seconds 5))}]}
-                    {:team-id 1}) => nil)
+                    {:id 1 :team-id 1}) => nil)
 
   (fact "returns the oldest successful sally against player, if there is one"
     (let [successful-sally {:target-team-id 1

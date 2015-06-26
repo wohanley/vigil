@@ -43,13 +43,13 @@
   alive."
   (first
    (sort-by :started
-            (filter (and (partial sally/against-team? (:team-id player))
-                         (partial sally/overdue? (:sally-duration game)))
+            (filter #(and (sally/against-team? {:id (:team-id player)} %)
+                          (sally/overdue? (:sally-duration game) %))
                     (:sallies game)))))
 
 
 (defn sally-forth [game target-team attacking-player]
-  "Launch an attack against an opposing team."
+  "Launch an attack against an opposing team. Return the inserted sally."
   (data/sally-forth<! {:attacking-player-id (:id attacking-player)
                        :target-team-id (:id target-team)}))
 
@@ -77,7 +77,7 @@
 
 (defn add-player-to-game [game name]
   "Create a team with a single player named name in the game identified by
-  game-id. The team gets the same name as player."
+  game-id. The team gets the same name as player. Return the inserted player."
   (data/insert-player<! (->player (:id (data/insert-team<! (->team (:id game)
                                                                    name)))
                                   name)))

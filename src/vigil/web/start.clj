@@ -6,6 +6,7 @@
             [ring.util.response :as ring-response]
             [ring.middleware.json :as json]
             [vigil.operations :as ops]
+            [vigil.core :as core]
             [environ.core :refer [env]]
             [ring.adapter.jetty :as jetty]
             [vigil.web.pages.index :as index]
@@ -18,12 +19,14 @@
   {:id (Integer/parseInt id)})
 
 
+(defn redirect-to-player-game [player-id]
+  (ring-response/redirect (format "/my-game/%s" player-id)))
+
 (defn new-game [player-name team-name sally-duration]
-  (ring-response/redirect
-   (format "/my-game/%s"
-           (:id (ops/new-game player-name
-                              team-name
-                              (Integer/parseInt sally-duration))))))
+  (redirect-to-player-game
+   (:id (ops/new-game player-name
+                      team-name
+                      (Integer/parseInt sally-duration)))))
 
 (defn get-game [id]
   "You don't have to be in a game to view its state."
@@ -35,11 +38,13 @@
   (game/page (ops/check (parse-id player-id))))
 
 (defn join-game [game-id name]
-  (game/page (ops/join-game (parse-id game-id) name)))
+  (redirect-to-player-game
+   (:id (core/add-player-to-game (parse-id game-id) name))))
 
 (defn sally-forth [target-team-id attacking-player-id]
-  (game/page (ops/sally-forth (parse-id target-team-id)
-                              (parse-id attacking-player-id))))
+  (redirect-to-player-game
+   (:attacking-player-id (ops/sally-forth (parse-id target-team-id)
+                                          (parse-id attacking-player-id)))))
 
 
 (defroutes app-routes
