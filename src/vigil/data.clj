@@ -97,4 +97,4 @@
 (def sally-forth<! (db-wrap sally-forth-raw<!))
 
 (defquery intercept-sally-raw! "intercept_sally.sql" {:connection db-spec})
-(def intercept-sally! (db-wrap intercept-sally-raw!))
+(defn intercept-sally! [params] (intercept-sally-raw! (db-prepare params)))

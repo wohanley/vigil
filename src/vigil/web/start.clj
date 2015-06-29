@@ -35,7 +35,9 @@
 (defn get-player-game [player-id]
   "Show a player the state of their game, crucially including a check for
   attackers. This handler is where the game is played."
-  (game/page (ops/check (parse-id player-id))))
+  (let [player (parse-id player-id)]
+    (ops/check player)
+    (game/page (ops/get-game-view-for-player player))))
 
 (defn join-game [game-id name]
   (redirect-to-player-game
