@@ -31,8 +31,6 @@
    2. Gather all the data a player needs for a view of their game."
   (let [player (data/get-player stale-player)
         game (data/get-full-game-by-player-id player)]
-    (println player)
-    (println game)
     (dorun (map #(data/intercept-sally!
                   (assoc % :intercepted-by-player-id (:id player)))
                 (filter
