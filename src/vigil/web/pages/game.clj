@@ -4,6 +4,7 @@
             [vigil.web.pages.player :as player]
             [vigil.web.pages.team :as team]
             [vigil.web.pages.attack-team :as attack-team]
+            [vigil.web.pages.join-game :as join-game]
             [clojure.pprint :refer [pprint]]))
 
 (def page
@@ -23,5 +24,7 @@
                                      :current-player current-player})
                                    []))
                         (:teams game)))
-   [:#join-game-id]
-   (enlive/set-attr :value (:id game))))
+   [:#join-game]
+   (if (empty? current-player)
+     (enlive/substitute (join-game/snip game))
+     (enlive/substitute ""))))

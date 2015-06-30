@@ -59,6 +59,9 @@
                         (not (nil? (:intercepted-by-player-id %)))))
                      (:sallies game))))))
 
+(defn alive? [game player]
+  (nil? (killed-by-sally game player)))
+
 
 (defn sally-forth [game target-team attacking-player]
   "Launch an attack against an opposing team. Return the inserted sally."
@@ -85,6 +88,28 @@
   {:precondition :in-game}
   (fn [e & args]
     (->error "attacking-player and target-team must both be in game.")))
+
+
+(defn intercept [game attacker interceptor]
+  "Mark all non-overdue, non-intercepted sallies by attacker as intercepted by
+  player."
+  ;; TODO: should check that attacker and interceptor are both in game.
+  (dorun
+   (map #(data/intercept-sally!
+          (assoc % :intercepted-by-player-id (:id interceptor)))
+        (filter #(and (sally/by-player? attacker %)
+                      (not (sally/overdue? (:sally-duration game) %))
+                      ((comp sally/intercepted?) %))
+                (:sallies game)))))
+
+(dire/with-precondition! #'intercept
+  :interceptor-alive
+  (fn [game interceptor _] (alive? game interceptor)))
+
+(dire/with-handler! #'intercept
+  {:precondition :interceptor-alive}
+  (fn [e & args]
+    (->error "interceptor must be alive.")))
 
 
 (defn add-player-to-game [game name]

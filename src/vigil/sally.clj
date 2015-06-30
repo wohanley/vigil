@@ -15,3 +15,6 @@
 (defn by-player? [player sally]
   "Predicate for sallies launched by player."
   (= (:id player) (:attacking-player-id sally)))
+
+(defn intercepted? [sally]
+  ((comp nil?) (:intercepted-by sally)))

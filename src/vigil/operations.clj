@@ -31,13 +31,16 @@
    2. Gather all the data a player needs for a view of their game."
   (let [player (data/get-player stale-player)
         game (data/get-full-game-by-player-id player)]
-    (dorun (map #(data/intercept-sally!
-                  (assoc % :intercepted-by-player-id (:id player)))
-                (filter
-                 #(and
-                   (not (sally/overdue? (:sally-duration game) %))
-                   (sally/against-team? {:id (:team-id player)} %))
-                 (:sallies game))))))
+    (if (core/alive? game player)
+      (dorun (map #(core/intercept
+                    game
+                    (data/get-player {:id (:attacking-player-id %)})
+                    player)
+                  (filter
+                   #(and
+                     (not (sally/overdue? (:sally-duration game) %))
+                     (sally/against-team? {:id (:team-id player)} %))
+                   (:sallies game)))))))
 
 (defn new-game [player-name team-name sally-duration]
   "Set up a game for the player."
