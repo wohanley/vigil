@@ -22,10 +22,9 @@
 (defn redirect-to-player-game [player-id]
   (ring-response/redirect (format "/my-game/%s" player-id)))
 
-(defn new-game [player-name team-name sally-duration]
+(defn new-game [name sally-duration]
   (redirect-to-player-game
-   (:id (ops/new-game player-name
-                      team-name
+   (:id (ops/new-game name
                       (Integer/parseInt sally-duration)))))
 
 (defn get-game [id]
@@ -54,8 +53,8 @@
   (GET "/game/:id" [id] (get-game id))
   (GET "/my-game/:player-id" [player-id]
        (get-player-game player-id))
-  (POST "/game/new" [player-name team-name sally-duration]
-        (new-game player-name team-name sally-duration))
+  (POST "/game/new" [name sally-duration]
+        (new-game name sally-duration))
   (POST "/join-game" [game-id name]
         (join-game game-id name))
   (POST "/sally-forth" [target-team-id attacking-player-id]

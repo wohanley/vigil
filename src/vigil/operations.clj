@@ -42,9 +42,11 @@
                      (sally/against-team? {:id (:team-id player)} %))
                    (:sallies game)))))))
 
-(defn new-game [player-name team-name sally-duration]
+(defn new-game [name sally-duration]
   "Set up a game for the player."
-  (game-view (core/set-up-game player-name team-name sally-duration)))
+  ;; For now, there's no frontend for teams, so just name the team after the
+  ;; player.
+  (game-view (core/set-up-game name name sally-duration)))
 
 (defn create-team [game-id name]
   (data/insert-team<! {:game-id game-id :name name}))
