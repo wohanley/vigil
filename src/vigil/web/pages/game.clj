@@ -1,10 +1,12 @@
 (ns vigil.web.pages.game
   (:require [net.cgrand.enlive-html :as enlive]
+            [vigil.core :as core]
             [vigil.web.pages.current-player :as current-player]
             [vigil.web.pages.player :as player]
             [vigil.web.pages.team :as team]
             [vigil.web.pages.attack-team :as attack-team]
             [vigil.web.pages.join-game :as join-game]
+            [vigil.web.pages.friend-link :as friend-link]
             [clojure.pprint :refer [pprint]]))
 
 (def page
@@ -18,7 +20,9 @@
    (enlive/content (str (:sally-duration game)))
    [:#teams]
    (enlive/content (map #(concat (team/snip %)
-                                 (if (not= (:id %) (:team-id current-player))
+                                 (if (and
+                                      (not (empty? current-player))
+                                      (not= (:id %) (:team-id current-player)))
                                    (attack-team/snip
                                     {:team %
                                      :current-player current-player})
@@ -27,4 +31,4 @@
    [:#join-game]
    (if (empty? current-player)
      (enlive/substitute (join-game/snip game))
-     (enlive/substitute ""))))
+     (enlive/substitute (friend-link/snip game)))))
